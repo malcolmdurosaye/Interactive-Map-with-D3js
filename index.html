@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Zoomable Highlights</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<h2>Interactive Map with Zoomable Highlights</h2>
+<svg id="map" width="800" height="500"></svg>
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+    const width = 800;
+    const height = 500;
+    const tooltip = d3.select("#tooltip");
+    const svg = d3.select("#map").attr("width", width).attr("height", height);
+
+    const projection = d3.geoMercator().scale(130).translate([width / 2, height / 1.5]);
+    const path = d3.geoPath().projection(projection);
+    const highlightedCountries = ["KEN", "ZAF", "NGA", "ZMB"];
+
+    const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
+        svg.selectAll("g").attr("transform", event.transform);
+    });
+
+    const g = svg.append("g");
+
+    // Function to auto zoom into a country
+    function autoZoomToCountry(d) {
+        const [[x0, y0], [x1, y1]] = path.bounds(d);
+        const dx = x1 - x0;
+        const dy = y1 - y0;
+        const x = (x0 + x1) / 2;
+        const y = (y0 + y1) / 2;
+        const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
+        const translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+        svg.transition()
+            .duration(750)
+            .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+    }
+
+    // Function to reset zoom
+    function resetZoom() {
+        svg.transition()
+            .duration(750)
+            .call(zoom.transform, d3.zoomIdentity);
+    }
+
+    // Load GeoJSON data and render the map
+    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function(worldData) {
+        g.selectAll("path")
+            .data(worldData.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("class", d => highlightedCountries.includes(d.id) ? "country highlighted" : "country")
+            .on("mouseover", function(event, d) {
+                if (highlightedCountries.includes(d.id)) {
+                    d3.select(this).style("fill", "#2A6BD9");
+                    autoZoomToCountry(d);
+                }
+                tooltip.style("visibility", "visible").text(d.properties.name);
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this).style("fill", d => highlightedCountries.includes(d.id) ? "#3787FF" : "#CBD5E1");
+                tooltip.style("visibility", "hidden");
+            })
+            .on("click", function() {
+                resetZoom(); // Reset zoom on click
+            });
+
+        svg.call(zoom);
+    });
+</script>
+
+</body>
+</html>
