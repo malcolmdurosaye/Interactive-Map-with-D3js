@@ -1,36 +1,33 @@
-<style>
-        /* Basic page styling */
-        body {
-            font-family: Arial, sans-serif; /* Set font for the page */
-        }
 
-        #map {
-            margin: 20px auto; /* Center the map horizontally */
-            display: block; /* Make the map a block element */
-            border: 1px solid #ccc; /* Add a light border around the map */
-        }
+body {
+    font-family: Arial, sans-serif; /* Set font for the page */
+}
 
-        /* Style for country hover tooltip */
-        .tooltip {
-            position: absolute; /* Position the tooltip absolutely */
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-            color: #fff; /* White text color */
-            padding: 5px 10px; /* Padding around the tooltip text */
-            border-radius: 5px; /* Rounded corners */
-            pointer-events: none; /* Prevent mouse events on the tooltip */
-            font-size: 12px; /* Font size for tooltip text */
-            visibility: hidden; /* Hide the tooltip by default */
-        }
+#map {
+    margin: 20px auto; /* Center the map horizontally */
+    display: block; /* Make the map a block element */
+    border: 1px solid #ccc; /* Add a light border around the map */
+}
 
-        /* Default color for all countries */
-        .country {
-            fill: #CBD5E1; /* Light grey for unhighlighted countries */
-            stroke: #fff; /* White stroke color for country borders */
-            stroke-width: 0.5px; /* Width of the border stroke */
-        }
+/* Style for country hover tooltip */
+.tooltip {
+    position: absolute; /* Position the tooltip absolutely */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: #fff; /* White text color */
+    padding: 5px 10px; /* Padding around the tooltip text */
+    border-radius: 5px; /* Rounded corners */
+    pointer-events: none; /* Prevent mouse events on the tooltip */
+    font-size: 12px; /* Font size for tooltip text */
+    visibility: hidden; /* Hide the tooltip by default */
+}
 
-        /* Color for highlighted countries */
-        .highlighted {
-            fill: #3787FF; /* Blue for highlighted countries */
-        }
-    </style>
+/* Default color for all countries */
+.country {
+    fill: #CBD5E1; /* Light grey for unhighlighted countries */
+    stroke: #fff; /* White stroke color for country borders */
+    stroke-width: 0.5px; /* Width of the border stroke */
+}
+
+/* Color for highlighted countries */
+.highlighted {
+    fill: #3787FF; /* Blue for highlighted countries */
